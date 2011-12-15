@@ -35,6 +35,7 @@ module Paperclip
     attr_reader :name, :instance, :default_style, :convert_options, :queued_for_write, :whiny, :options, :interpolator
     attr_reader :source_file_options, :whiny
     attr_accessor :post_processing
+    attr_accessor :post_processing
 
     # Creates an Attachment object. +name+ is the name of the attachment,
     # +instance+ is the ActiveRecord object instance it's attached to, and
@@ -311,7 +312,7 @@ module Paperclip
     # thumbnails forcefully, by reobtaining the original file and going through
     # the post-process again.
     def reprocess!(*style_args)
-      new_original = Tempfile.new("paperclip-reprocess")
+      new_original = to_tempfile(self)
       new_original.binmode
       if old_original = to_file(:original)
         new_original.write( old_original.respond_to?(:get) ? old_original.get : old_original.read )
