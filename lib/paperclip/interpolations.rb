@@ -102,6 +102,8 @@ module Paperclip
     # if the extension from teh original filename is one of these extensions,
     # that extension is used, otherwise, the first in the list is used.
     def content_type_extension attachment, style_name
+      return style[:format] if (style = attachment.styles[style_name]) && style[:format])
+      
       mime_type = MIME::Types[attachment.content_type]
       extensions_for_mime_type = unless mime_type.empty?
         mime_type.first.extensions
